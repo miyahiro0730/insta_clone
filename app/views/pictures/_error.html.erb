@@ -1,0 +1,11 @@
+<% if @picture.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= @picture.errors.count %>件のエラーがあります。</h2>
+
+    <ul>
+      <% @picture.errors.full_messages.each do |msg| %>
+        <li><%=msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

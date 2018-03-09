@@ -1,0 +1,91 @@
+<!-- Header -->
+<header class="masthead">
+  <div class="container">
+    <div class="intro-text">
+      <% if logged_in? %>
+        <!-- ログインしている場合 -->
+
+        <div class="intro-heading text-uppercase">いまどうしてる？</div>
+
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+          <%= form_with(model: @picture, local: true, url:confirm_pictures_path) do |form| %>
+            <p><%= form.text_area :content, :class=>"form-control" %></p>
+            <p>
+              <%= form.file_field :image, id: :picture_image %>
+              <!-- 確認画面から新規作成画面に戻った時に情報を保持するための記述 -->
+              <%= form.hidden_field :image_cache %>
+            </p>
+            <p><%= form.submit :"投稿する", :class=>"btn btn-primary" %></p>
+            <%= form.hidden_field :user_id, :value => current_user.id %>
+            <%= render 'error' %>
+          <% end %>
+        </div>
+        <div class="col-lg-4"></div>
+      <% else %>
+        <!-- # ログインしていない場合 -->
+        <p class="intro-heading text-uppercase">ログインしてください</p>
+        <p class="col-lg-12"><%= link_to 'ログイン画面', new_session_path %></p>
+
+      <% end %>
+    </div>
+  </div>
+</header>
+
+
+<!-- post_list -->
+<section id="about">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h2 class="section-heading text-uppercase">みんなのつぶやき</h2>
+      </div>
+    </div>
+
+    <% if @list.count == 0 %>
+      <!-- ０件だったら、投稿無い旨表示する -->
+      <p>まだツイートがありません。新規につぶやいてください</p>
+
+    <% else %>
+      <div class="row">
+        <% @list.reverse_each do |list| %>
+          <div class="col-lg-12" style="border: inset 0px #ff0000;">
+            <ul>
+              <li>
+                <h3><%= list.content %></h4>
+                <% unless list.image.url.nil? then %>
+                  <p><%= image_tag(list.image.url, :size =>"200") %></p>
+                <% end %>
+                <p><i><%= list.user.name %>さんの投稿</i></p>
+                <p><i><%= list.created_at %></i></p>
+
+                <% if logged_in? %>
+                  <!-- ログインしている場合のみお気に入り選択 -->
+
+                  <!-- お気に入りツイート取得 -->
+                  <% @favorite = current_user.favorites.find_by(picture_id: list.id) %>
+
+                  <!-- お気に入り選択 -->
+                  <% if @favorite.present? %>
+                    <%= link_to 'お気に入り解除する', favorite_path(id: @favorite.id), method: :delete, class: 'btn btn-danger' %>
+                  <% else %>
+                    <%= link_to 'お気に入りする', favorites_path(picture_id: list.id), method: :post, class: 'btn btn-primary' %>
+                  <% end %>
+                <% end %>
+
+                <!-- 自分のIDの場合のみ表示する -->
+                <% if !current_user.nil? && list.user_id == current_user.id %>
+                  <div class="picture-button-field">
+                    <%= link_to '編集', edit_picture_path(list.id), class: 'btn btn-info' %> |
+                    <%= link_to '削除', list, method: :delete, data: { confirm: 'このつぶやきを削除しますか?' }, class: 'btn btn-danger' %>
+                  </div>
+                <% end %>
+
+              </li>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>

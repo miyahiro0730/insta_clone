@@ -1,0 +1,59 @@
+<!-- Header -->
+<header class="masthead">
+  <div class="container">
+    <div class="intro-text">
+      <div class="intro-heading text-uppercase">ユーザー画面</div>
+
+        <p><%= @user.name %>さんのページです</p>
+        <p><%= link_to 'ログイン画面へ進む', new_session_path %></p>
+
+        <p><%= link_to 'トップ画面へ進む', pictures_path %></p>
+
+    </div>
+  </div>
+</header>
+
+
+<!-- favorite_list -->
+<section id="about">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h2 class="section-heading text-uppercase">お気に入りリスト</h2>
+      </div>
+
+      <% if @favorites.count == 0 %>
+        <!-- ０件だったら、投稿無い旨表示する -->
+        <p>まだお気に入りがありません。お気に入りを設定してください</p>
+
+      <% else %>
+
+        <% @favorites.reverse_each do |f| %>
+          <div class="col-lg-12" style="border: inset 0px #ff0000;">
+            <ul>
+              <li>
+                <h3><%= f.picture.content %></h4>
+
+                <% unless f.picture.image.url.nil? then %>
+                  <p><%= image_tag f.picture.image, :size =>"200" %></p>
+                <% end %>
+                <p><i><%= f.picture.user.name %>さんの投稿</i></p>
+                <p><i><%= f.picture.created_at %></i></p>
+
+                <!-- 自分のIDの場合のみ表示する -->
+                <% if !current_user.nil? && f.user_id == current_user.id %>
+                  <div class="picture-button-field">
+                    <%= link_to '編集', edit_picture_path(f.picture.id), class: 'btn btn-info' %> |
+                    <%= link_to '削除', f.picture, method: :delete, data: { confirm: 'この投稿を削除しますか?' }, class: 'btn btn-danger' %>
+                  </div>
+                <% end %>
+
+              </li>
+            </ul>
+          </div>
+        <% end %>
+
+      <% end %>
+    </div>
+  </div>
+</section>

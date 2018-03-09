@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="intro-text">
+
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4" style="text-align:center;">
+      <%= form_with(model:@picture, local:true) do |form| %>
+        <%= form.hidden_field :content %>
+        <%= form.hidden_field :user_id, :value => current_user.id  %>
+        <p><%= form.text_area :content, :class=>"form-control"  %></p>
+
+        <!-- 確認画面から新規作成画面に戻った時に情報を保持するための記述 -->
+        <% unless @picture.image.url.nil? then %>
+          <p><%= image_tag @picture.image.url, :size =>"200"  %></p>
+          <%= hidden_field_tag :"cache[image]",@picture.image.cache_name %>
+        <% end %>
+        <br />
+
+        <%= render 'error' %>
+
+        <p><%= form.submit "投稿する",:class=>"btn btn-primary" %></p>
+      <% end %>
+
+      <%= form_with(model:@picture, url:pictures_path, local:true, method:'get') do |form| %>
+        <%= form.hidden_field :content %>
+        <p><%= form.submit "戻る",name:'back',:class=>"btn btn-primary" %></p>
+      <% end %>
+    </div>
+    <div class="col-lg-4"></div>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>insta_Clone</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <header class="navigation">
+      <nav class="navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="navbar-brand js-scroll-trigger col-lg-2"><%= link_to 'Insta-Clone', pictures_path %></div>
+        <div class="col-lg-8"></div>
+
+        <% if logged_in? %>
+          <!-- ログインしている場合 -->
+          <div class="navbar-brand js-scroll-trigger col-lg-1"><%= link_to current_user.name, user_path(current_user.id) %> </div>
+          <div class="navbar-brand js-scroll-trigger col-lg-1"><%= link_to "ログアウト", session_path(current_user.id), method: :delete %></div>
+        <% else %>
+          <!-- # ログインしていない場合 -->
+          <div class="navbar-brand js-scroll-trigger col-lg-1"><%= link_to 'ログイン', new_session_path %></div>
+          <div class="navbar-brand js-scroll-trigger col-lg-1"><%= link_to '新規登録', new_user_path %></div>
+        <% end %>
+
+      </nav>
+    </header>
+
+    <%= yield %>
+
+    <!-- Footer -->
+    <footer class="copyright">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <span class="copyright">Copyright &copy; insta_Clone 2018</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
