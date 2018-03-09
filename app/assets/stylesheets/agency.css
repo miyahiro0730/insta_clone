@@ -8,7 +8,8 @@ p {
 }
 
 a {
-  color: #fed136;
+  color: #a94442;
+  font-weight: bold;
 }
 
 a:hover {
@@ -167,7 +168,7 @@ img::-moz-selection {
 
 header.masthead {
   text-align: center;
-  color: white;
+  color: #555;
   /* background-image: image-url("/assets/header-bg.jpg"); */
   background-image: url("/assets/head_insta.png");
   background-color: #1da1f2;

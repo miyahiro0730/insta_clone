@@ -2,7 +2,7 @@
   <div id="error_explanation">
     <h2><%= @picture.errors.count %>件のエラーがあります。</h2>
 
-    <ul>
+    <ul style="text-align:left;">
       <% @picture.errors.full_messages.each do |msg| %>
         <li><%=msg %></li>
       <% end %>
